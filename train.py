@@ -23,7 +23,7 @@ def main():
                   return_tensors="pt", max_length=512)
 
     datamodule = TextClassificationDataModule(tokenizer,
-                                              "./dataset",
+                                              "./dataset.json",
                                               batch_size=16,
                                               **kwargs)
 
