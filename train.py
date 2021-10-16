@@ -4,7 +4,7 @@ from transformers import AutoTokenizer
 from model import TextClassificationTransformer
 from data_helpers import TextClassificationDataModule, label2idx
 import pathlib
-import numpy as np
+import json
 
 pl.seed_everything(42)
 
