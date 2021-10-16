@@ -1,0 +1,6 @@
+torch
+pytorch_lightning
+transformers
+torchmetrics
+tokenizers
+numpy
