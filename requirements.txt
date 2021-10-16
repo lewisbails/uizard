@@ -5,3 +5,4 @@ torchmetrics
 tokenizers
 numpy
 tqdm
+scikit-learn

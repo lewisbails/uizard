@@ -24,24 +24,21 @@ def main():
     kwargs = dict(padding="max_length", truncation=True,
                   return_tensors="pt", max_length=512)
 
-    jsons = list(pathlib.Path("./dataset").glob("*.json"))
-    chunk_size = 1000
+    training_data = json.load(open("./sample_20000.json", "r"))
 
-    for i in range(0, len(jsons), chunk_size):
-        chunk = jsons[i:i + n]
-        datamodule = TextClassificationDataModule(tokenizer,
-                                                  chunk,
-                                                  batch_size=16,
-                                                  **kwargs)
+    datamodule = TextClassificationDataModule(tokenizer,
+                                              training_data,
+                                              batch_size=16,
+                                              **kwargs)
 
-        trainer = pl.Trainer(gpus=1,
-                             callbacks=[EarlyStopping(monitor="val_loss")],
-                             max_epochs=5,
-                             deterministic=True,
-                             auto_lr_find=True)
+    trainer = pl.Trainer(gpus=1,
+                         callbacks=[EarlyStopping(monitor="val_loss")],
+                         max_epochs=5,
+                         deterministic=True,
+                         auto_lr_find=True)
 
-        trainer.fit(model, datamodule)
-        trainer.test()
+    trainer.fit(model, datamodule)
+    trainer.test()
 
 
 if __name__ == "__main__":

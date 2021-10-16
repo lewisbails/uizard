@@ -59,13 +59,6 @@ class TextClassificationDataModule(pl.LightningDataModule):
         self.batch_size = batch_size
         self.p_val = p_val
 
-    def prepare_data(self):
-        # load jsons into train and test arrays
-        train = [json.load(open(f, "r", encoding="utf-8"))
-                 for f in tqdm(self.training_data)]
-
-        self.train = np.concatenate(train)
-
     def setup(self, stage):
         # extract the text and label, tokenize, split, and prepare the Datasets
         if stage == "fit" or stage is None:
