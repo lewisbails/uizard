@@ -48,20 +48,20 @@ class TextClassificationDataset(torch.utils.data.Dataset):
 class TextClassificationDataModule(pl.LightningDataModule):
     def __init__(self,
                  tokenizer,
-                 train_dir: str,
+                 training_data: str,
                  batch_size: int = 32,
                  p_val: float = 0.1,
                  **tokenizer_kwargs):
         super(TextClassificationDataModule, self).__init__()
         self.tokenizer = tokenizer
         self.tokenizer_kwargs = tokenizer_kwargs
-        self.train_dir = train_dir
+        self.training_data = train_dir
         self.batch_size = batch_size
         self.p_val = p_val
 
     def prepare_data(self):
         # load jsons into train and test arrays
-        self.train = json.load(open(f, "r", encoding="utf-8"))
+        self.train = json.load(open(self.training_data, "r", encoding="utf-8"))
 
     def setup(self, stage):
         # extract the text and label, tokenize, split, and prepare the Datasets
