@@ -55,7 +55,7 @@ class TextClassificationDataModule(pl.LightningDataModule):
         super(TextClassificationDataModule, self).__init__()
         self.tokenizer = tokenizer
         self.tokenizer_kwargs = tokenizer_kwargs
-        self.training_data = train_dir
+        self.training_data = training_data
         self.batch_size = batch_size
         self.p_val = p_val
 
