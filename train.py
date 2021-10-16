@@ -27,7 +27,8 @@ def main():
                                               batch_size=16,
                                               **kwargs)
 
-    trainer = pl.Trainer(callbacks=[EarlyStopping(monitor="val_loss")],
+    trainer = pl.Trainer(gpus=1,
+                         callbacks=[EarlyStopping(monitor="val_loss")],
                          max_epochs=10,
                          deterministic=True)
 

@@ -5,6 +5,7 @@ import pytorch_lightning as pl
 import numpy as np
 from typing import Iterable, Optional, Union
 from transformers import BatchEncoding
+from tqdm import tqdm
 
 
 label2idx = {l: i for i, l in enumerate([
@@ -61,7 +62,7 @@ class TextClassificationDataModule(pl.LightningDataModule):
     def prepare_data(self):
         # load jsons into train and test arrays
         train = [json.load(open(f, "r", encoding="utf-8"))
-                 for f in list(pathlib.Path(self.train_dir).glob("*.json"))]
+                 for f in tqdm(list(pathlib.Path(self.train_dir).glob("*.json")))]
 
         self.train = np.concatenate(train)
 
