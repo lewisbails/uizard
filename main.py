@@ -1,4 +1,14 @@
 from typing import List
+from model import TextClassificationTransformer
+from data_helpers import label2idx
+from transformers import AutoTokenizer
+
+model_ckpt = ""
+tokenizer_ckpt = "distilroberta-base"
+
+model = TextClassificationTransformer.load_from_checkpoint(
+    checkpoint_path=model_ckpt)
+tokenizer = AutoTokenizer.from_pretrained(tokenizer_ckpt)
 
 
 def predict(input_file_path: str) -> List[str]:

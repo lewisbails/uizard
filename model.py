@@ -42,7 +42,8 @@ class TextClassificationTransformer(pl.LightningModule):
         preds = torch.argmax(z, dim=1)
 
         # calculate F1
-        macro_f1 = torchmetrics.functional.f1(preds, y, average="macro")
+        macro_f1 = torchmetrics.functional.f1(
+            preds, y, average="macro", num_classes=self.num_labels)
         f1 = torchmetrics.functional.f1(preds, y, average=None)
 
         self.log_dict({"macro_f1": macro_f1, "f1": f1})
