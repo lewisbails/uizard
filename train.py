@@ -3,6 +3,8 @@ from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from transformers import AutoTokenizer
 from model import TextClassificationTransformer
 from data_helpers import TextClassificationDataModule, label2idx
+import pathlib
+import numpy as np
 
 pl.seed_everything(42)
 
@@ -22,19 +24,24 @@ def main():
     kwargs = dict(padding="max_length", truncation=True,
                   return_tensors="pt", max_length=512)
 
-    datamodule = TextClassificationDataModule(tokenizer,
-                                              "./dataset.json",
-                                              batch_size=16,
-                                              **kwargs)
+    jsons = list(pathlib.Path("./dataset").glob("*.json"))
+    chunk_size = 1000
 
-    trainer = pl.Trainer(gpus=1,
-                         callbacks=[EarlyStopping(monitor="val_loss")],
-                         max_epochs=10,
-                         deterministic=True)
+    for i in range(0, len(jsons), chunk_size):
+        chunk = jsons[i:i + n]
+        datamodule = TextClassificationDataModule(tokenizer,
+                                                  chunk,
+                                                  batch_size=16,
+                                                  **kwargs)
 
-    trainer.fit(model, datamodule)
+        trainer = pl.Trainer(gpus=1,
+                             callbacks=[EarlyStopping(monitor="val_loss")],
+                             max_epochs=5,
+                             deterministic=True,
+                             auto_lr_find=True)
 
-    trainer.test()
+        trainer.fit(model, datamodule)
+        trainer.test()
 
 
 if __name__ == "__main__":
