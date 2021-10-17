@@ -44,6 +44,7 @@ class TextClassificationTransformer(pl.LightningModule):
         # calculate F1
         macro_f1 = torchmetrics.functional.f1(
             preds, y, average="macro", num_classes=self.num_labels)
-        f1 = torchmetrics.functional.f1(preds, y, average=None)
+        f1 = torchmetrics.functional.f1(
+            preds, y, average=None, num_classes=self.num_labels)
 
         self.log_dict({"macro_f1": macro_f1, "f1": f1})

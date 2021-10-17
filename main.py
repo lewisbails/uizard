@@ -12,6 +12,7 @@ tokenizer_ckpt = "distilroberta-base"
 
 model = TextClassificationTransformer.load_from_checkpoint(
     checkpoint_path=model_ckpt)
+model.eval()
 tokenizer = AutoTokenizer.from_pretrained(tokenizer_ckpt)
 tok_kwargs = dict(padding="max_length", truncation=True,
                   return_tensors="pt", max_length=512)
@@ -25,8 +26,9 @@ def predict(input_file_path: str) -> List[str]:
     Example:
     predict("some/page/file/with3sentences.json") -> ["section", "paragraph", "title"]
     """
-    data = json.load(open(input_file_path, "r"))
-    inputs = tokenizer([d["text"] for d in data], **tok_kwargs)
-    logits = model(**inputs).logits
-    labels = torch.argmax(logits, axis=1).cpu().detach().numpy()
-    return [idx2label[l] for l in labels]
+    with torch.inference_mode():
+        data = json.load(open(input_file_path, "r"))
+        inputs = tokenizer([d["text"] for d in data], **tok_kwargs)
+        logits = model(**inputs).logits
+        labels = torch.argmax(logits, axis=1).cpu().detach().numpy()
+        return [idx2label[l] for l in labels]
