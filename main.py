@@ -8,7 +8,7 @@ from transformers import AutoTokenizer
 idx2label = {v: k for k, v in label2idx.items()}
 
 model = TextClassificationTransformer.load_from_checkpoint(
-    checkpoint_path="./distilroberta-base-finetuned.ckpt")
+    "./distilroberta-base-finetuned.ckpt")
 model.eval()
 tokenizer = AutoTokenizer.from_pretrained("distilroberta-base")
 tok_kwargs = dict(padding="max_length", truncation=True,
