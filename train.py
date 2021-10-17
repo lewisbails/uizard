@@ -1,19 +1,20 @@
+import pathlib
+import json
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from transformers import AutoTokenizer
 from model import TextClassificationTransformer
 from data_helpers import TextClassificationDataModule, label2idx
-import pathlib
-import json
+
 
 pl.seed_everything(42)
 
 
 def main():
-    # proxy issues - use local copy of the model/tokenizer
     pretrained_path = "distilroberta-base"
     model = TextClassificationTransformer(pretrained_path, len(label2idx))
 
+    # freeze base layers
     for param in model.classifier.parameters():
         param.requires_grad = False
 
@@ -24,6 +25,7 @@ def main():
     kwargs = dict(padding="max_length", truncation=True,
                   return_tensors="pt", max_length=512)
 
+    # load stratified sample data
     training_data = json.load(open("./sample_20000.json", "r"))
 
     datamodule = TextClassificationDataModule(tokenizer,
@@ -39,6 +41,7 @@ def main():
 
     trainer.fit(model, datamodule)
     trainer.test()
+    trainer.save_checkpoint("./distilroberta-base-finetuned.ckpt")
 
 
 if __name__ == "__main__":

@@ -29,6 +29,7 @@ class TextClassificationDataset(torch.utils.data.Dataset):
     def __init__(self, X: BatchEncoding, y: Optional[Iterable[str]] = None):
         if X.is_fast:
             # dealing with tokenizers.Encodings
+            # i could just write my own collator
             self.X = [{"input_ids": torch.LongTensor(
                 x.ids), "attention_mask": torch.LongTensor(x.attention_mask)} for x in X.encodings]
         else:
