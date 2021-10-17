@@ -7,13 +7,10 @@ from transformers import AutoTokenizer
 
 idx2label = {v: k for k, v in label2idx.items()}
 
-model_ckpt = "./distilroberta-base-finetuned.ckpt"
-tokenizer_ckpt = "distilroberta-base"
-
 model = TextClassificationTransformer.load_from_checkpoint(
-    checkpoint_path=model_ckpt)
+    checkpoint_path="./distilroberta-base-finetuned.ckpt")
 model.eval()
-tokenizer = AutoTokenizer.from_pretrained(tokenizer_ckpt)
+tokenizer = AutoTokenizer.from_pretrained("distilroberta-base")
 tok_kwargs = dict(padding="max_length", truncation=True,
                   return_tensors="pt", max_length=512)
 
@@ -32,3 +29,9 @@ def predict(input_file_path: str) -> List[str]:
         logits = model(**inputs).logits
         labels = torch.argmax(logits, axis=1).cpu().detach().numpy()
         return [idx2label[l] for l in labels]
+
+
+if __name__ == "__main__":
+    import sys
+    labels = predict(sys.argv[1])
+    print(labels)

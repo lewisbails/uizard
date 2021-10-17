@@ -3,7 +3,7 @@ import json
 import torch
 import pytorch_lightning as pl
 import numpy as np
-from typing import Iterable, Optional, Union
+from typing import Iterable, Optional, Union, List
 from transformers import BatchEncoding
 from tqdm import tqdm
 
@@ -49,7 +49,7 @@ class TextClassificationDataset(torch.utils.data.Dataset):
 class TextClassificationDataModule(pl.LightningDataModule):
     def __init__(self,
                  tokenizer,
-                 training_data: list,
+                 training_data: List[dict],
                  batch_size: int = 32,
                  p_val: float = 0.1,
                  **tokenizer_kwargs):

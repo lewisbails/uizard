@@ -2,7 +2,6 @@ import torch
 import torchmetrics
 import pytorch_lightning as pl
 from torch.nn import functional as F
-from transformers import AutoModelForSequenceClassification
 
 
 class TextClassificationTransformer(pl.LightningModule):

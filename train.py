@@ -28,7 +28,7 @@ def main():
                   return_tensors="pt", max_length=512)
 
     # load stratified sample data
-    training_data = json.load(open("./sample_20000.json", "r"))
+    training_data = json.load(open("./sample_10000.json", "r"))
 
     datamodule = TextClassificationDataModule(tokenizer,
                                               training_data,
