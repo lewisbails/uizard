@@ -40,8 +40,8 @@ def main():
                          auto_lr_find=True)
 
     trainer.fit(model, datamodule)
-    trainer.test()
     trainer.save_checkpoint("./distilroberta-base-finetuned.ckpt")
+    trainer.test()
 
 
 if __name__ == "__main__":
