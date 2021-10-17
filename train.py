@@ -14,7 +14,7 @@ def main():
     pretrained_path = "distilroberta-base"
     roberta = AutoModelForSequenceClassification.from_pretrained(
         pretrained_path, num_labels=len(label2idx))
-    clf = TextClassificationTransformer(roberta)
+    clf = TextClassificationTransformer(roberta, num_labels=len(label2idx))
 
     # freeze base layers
     for param in clf.model.parameters():
