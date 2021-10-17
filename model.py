@@ -6,16 +6,15 @@ from transformers import AutoModelForSequenceClassification
 
 
 class TextClassificationTransformer(pl.LightningModule):
-    def __init__(self, model_path: str, num_labels: int, learning_rate: float = 1e-3):
+    def __init__(self, model, num_labels: int, learning_rate: float = 1e-3):
         super(TextClassificationTransformer, self).__init__()
         self.save_hyperparameters()
         self.num_labels = num_labels
         self.learning_rate = learning_rate
-        self.classifier = AutoModelForSequenceClassification.from_pretrained(
-            model_path, num_labels=num_labels)
+        self.model = model
 
     def forward(self, *args, **kwargs):
-        return self.classifier(*args, **kwargs)
+        return self.model(*args, **kwargs)
 
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(self.parameters(), lr=self.learning_rate)

@@ -12,13 +12,15 @@ pl.seed_everything(42)
 
 def main():
     pretrained_path = "distilroberta-base"
-    model = TextClassificationTransformer(pretrained_path, len(label2idx))
+    roberta = AutoModelForSequenceClassification.from_pretrained(
+        pretrained_path, num_labels=len(label2idx))
+    clf = TextClassificationTransformer(roberta)
 
     # freeze base layers
-    for param in model.classifier.parameters():
+    for param in clf.model.parameters():
         param.requires_grad = False
 
-    for param in model.classifier.classifier.parameters():
+    for param in clf.model.classifier.parameters():
         param.requires_grad = True
 
     tokenizer = AutoTokenizer.from_pretrained(pretrained_path)
